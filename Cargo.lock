@@ -3,11 +3,22 @@
 version = 3
 
 [[package]]
+name = "add-day"
+version = "0.1.0"
+
+[[package]]
 name = "aoc-utils"
 version = "0.1.0"
 
 [[package]]
 name = "day0"
+version = "0.1.0"
+dependencies = [
+ "aoc-utils",
+]
+
+[[package]]
+name = "day2"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",

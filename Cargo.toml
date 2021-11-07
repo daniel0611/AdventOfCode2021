@@ -2,5 +2,6 @@
 
 members = [
     "aoc-utils",
+    "add-day",
     "day*",
 ]

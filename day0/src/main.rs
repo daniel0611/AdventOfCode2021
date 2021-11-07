@@ -20,3 +20,18 @@ fn solve_a() -> usize {
 fn solve_b() -> usize {
     PuzzleInput::get_input_b(DAY).lines().len()
 }
+
+#[cfg(test)]
+mod tests {
+    // solve_a should return 2
+    #[test]
+    fn test_solve_a() {
+        assert_eq!(super::solve_a(), 2);
+    }
+
+    // solve_b should return 1
+    #[test]
+    fn test_solve_b() {
+        assert_eq!(super::solve_b(), 1);
+    }
+}
