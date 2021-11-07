@@ -16,10 +16,3 @@ version = "0.1.0"
 dependencies = [
  "aoc-utils",
 ]
-
-[[package]]
-name = "day2"
-version = "0.1.0"
-dependencies = [
- "aoc-utils",
-]
