@@ -1,0 +1,2 @@
+This is the input for puzzle task A
+Oh, a new line!
