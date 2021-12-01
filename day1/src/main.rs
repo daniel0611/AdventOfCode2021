@@ -59,7 +59,7 @@ mod tests {
     #[test]
     fn test_no_panic() {
         solve_a(&PuzzleInput::get_input_a(DAY));
-        solve_b(&PuzzleInput::get_input_b(DAY));
+        solve_b(&PuzzleInput::get_input_a(DAY));
     }
 
     #[test]
