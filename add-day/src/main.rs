@@ -58,17 +58,17 @@ fn create_src(day: u8, day_dir: &PathBuf) {
 const DAY: u8 = {day};
 
 fn main() {{
+    let input_a = PuzzleInput::get_input_a(DAY);
+    let input_b = PuzzleInput::get_input_b(DAY);
     println!("A: {{}}", solve_a());
     println!("B: {{}}", solve_b());
 }}
 
-fn solve_a() -> usize {{
-    let input = PuzzleInput::get_input_a(DAY);
+fn solve_a(input: &PuzzleInput) -> usize {{
     input.lines().len()
 }}
 
-fn solve_b() -> usize {{
-    let input = PuzzleInput::get_input_a(DAY);
+fn solve_b(input: &PuzzleInput) -> usize {{
     input.lines().len()
 }}
 
@@ -78,8 +78,10 @@ mod tests {{
 
     #[test]
     fn test_no_panic() {{
-        solve_a();
-        solve_b();
+        let input_a = PuzzleInput::get_input_a(DAY);
+        let input_b = PuzzleInput::get_input_b(DAY);
+        solve_a(&input_a);
+        solve_b(&input_b);
     }}
 }}
 "#,
