@@ -1,3 +1,4 @@
+use std::path::Path;
 use std::fs;
 use std::io::{self, Write};
 use std::path::PathBuf;
@@ -24,7 +25,7 @@ fn get_day() -> u8 {
     day.trim().parse::<u8>().expect("Please enter a number!")
 }
 
-fn create_day_dir<'a>(day: u8) -> PathBuf {
+fn create_day_dir(day: u8) -> PathBuf {
     let day_directory_str = format!("day{}", day);
     let day_directory = PathBuf::from(&day_directory_str);
     fs::create_dir(&day_directory).expect("Could not create day directory");
@@ -32,7 +33,7 @@ fn create_day_dir<'a>(day: u8) -> PathBuf {
     day_directory
 }
 
-fn create_cargo_toml(day: u8, day_dir: &PathBuf) {
+fn create_cargo_toml(day: u8, day_dir: &Path) {
     let cargo_toml_path = day_dir.join("Cargo.toml");
     let cargo_toml_str = format!(
         r#"[package]
@@ -48,7 +49,7 @@ aoc-utils = {{ path = "../aoc-utils" }}
     fs::write(&cargo_toml_path, cargo_toml_str).expect("Could not write Cargo.toml");
 }
 
-fn create_src(day: u8, day_dir: &PathBuf) {
+fn create_src(day: u8, day_dir: &Path) {
     let src_dir = &day_dir.join("src");
     fs::create_dir(src_dir).expect("Could not create src directory");
 
@@ -88,7 +89,7 @@ mod tests {{
     fs::write(&main_rs_path, main_rs_str).expect("Could not write main.rs");
 }
 
-fn create_input_file(day: u8, day_dir: &PathBuf) {
+fn create_input_file(day: u8, day_dir: &Path) {
     let name = format!("input_day{}.txt", day);
     let input_file_path = day_dir.join(name);
     fs::File::create(input_file_path).expect("Could not create input file");

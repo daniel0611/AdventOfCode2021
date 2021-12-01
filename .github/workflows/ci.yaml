@@ -38,6 +38,12 @@ jobs:
           args: -p ${{ matrix.dir }}
 
       - uses: actions-rs/cargo@v1
+        name: Clippy
+        with:
+          command: clippy
+          args: -p ${{ matrix.dir }} -- -D warnings
+
+      - uses: actions-rs/cargo@v1
         name: Run
         # Only run actual solutions and not utlities like add-day
         if: startsWith(matrix.dir, 'day')
