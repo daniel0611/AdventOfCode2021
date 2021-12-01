@@ -54,9 +54,7 @@ fn convert_to_numbers(input: &PuzzleInput) -> Vec<i32> {
 mod tests {
     use super::*;
 
-    const example_input: PuzzleInput = PuzzleInput {
-        raw_input: String::from("199\n200\n208\n210\n200\n207\n240\n269\n260\n263"),
-    };
+    const EXAMPLE_INPUT: &str = "199\n200\n208\n210\n200\n207\n240\n269\n260\n263";
 
     #[test]
     fn test_no_panic() {
@@ -66,11 +64,13 @@ mod tests {
 
     #[test]
     fn test_solve_a() {
-        assert_eq!(solve_a(&example_input), 7);
+        let input = PuzzleInput {raw_input: EXAMPLE_INPUT.to_string()};
+        assert_eq!(solve_a(&input), 7);
     }
 
     #[test]
     fn test_solve_b() {
-        assert_eq!(solve_b(&example_input), 5);
+        let input = PuzzleInput {raw_input: EXAMPLE_INPUT.to_string()};
+        assert_eq!(solve_b(&input), 5);
     }
 }
