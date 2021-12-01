@@ -10,7 +10,7 @@ fn main() {
     let day_dir = create_day_dir(day);
     create_cargo_toml(day, &day_dir);
     create_src(day, &day_dir);
-    create_inputs(day, &day_dir);
+    create_input_file(day, &day_dir);
 }
 
 fn get_day() -> u8 {
@@ -58,10 +58,9 @@ fn create_src(day: u8, day_dir: &PathBuf) {
 const DAY: u8 = {day};
 
 fn main() {{
-    let input_a = PuzzleInput::get_input_a(DAY);
-    let input_b = PuzzleInput::get_input_b(DAY);
-    println!("A: {{}}", solve_a());
-    println!("B: {{}}", solve_b());
+    let input = PuzzleInput::get_input(DAY);
+    println!("A: {{}}", solve_a(&input));
+    println!("B: {{}}", solve_b(&input));
 }}
 
 fn solve_a(input: &PuzzleInput) -> usize {{
@@ -78,10 +77,9 @@ mod tests {{
 
     #[test]
     fn test_no_panic() {{
-        let input_a = PuzzleInput::get_input_a(DAY);
-        let input_b = PuzzleInput::get_input_b(DAY);
-        solve_a(&input_a);
-        solve_b(&input_b);
+        let input = PuzzleInput::get_input(DAY);
+        solve_a(&input);
+        solve_b(&input);
     }}
 }}
 "#,
@@ -90,13 +88,8 @@ mod tests {{
     fs::write(&main_rs_path, main_rs_str).expect("Could not write main.rs");
 }
 
-fn create_inputs(day: u8, day_dir: &PathBuf) {
-    let inputs_directory = &day_dir.join("inputs");
-    fs::create_dir(inputs_directory).expect("Could not create inputs directory");
-
-    for challange in ['a', 'b'] {
-        let name = format!("{}{}.txt", day, challange);
-        let input_path = inputs_directory.join(name);
-        fs::File::create(input_path).expect("Could not create input file");
-    }
+fn create_input_file(day: u8, day_dir: &PathBuf) {
+    let name = format!("input_day{}.txt", day);
+    let input_file_path = day_dir.join(name);
+    fs::File::create(input_file_path).expect("Could not create input file");
 }

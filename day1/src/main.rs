@@ -2,7 +2,7 @@ use aoc_utils::PuzzleInput;
 const DAY: u8 = 1;
 
 fn main() {
-    let input = PuzzleInput::get_input_a(DAY);
+    let input = PuzzleInput::get_input(DAY);
     println!("A: {}", solve_a(&input));
     println!("B: {}", solve_b(&input));
 }
@@ -49,8 +49,9 @@ mod tests {
 
     #[test]
     fn test_no_panic() {
-        solve_a(&PuzzleInput::get_input_a(DAY));
-        solve_b(&PuzzleInput::get_input_a(DAY));
+        let input = PuzzleInput::get_input(DAY);
+        solve_a(&input);
+        solve_b(&input);
     }
 
     #[test]
