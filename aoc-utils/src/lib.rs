@@ -6,6 +6,12 @@ pub struct PuzzleInput {
 }
 
 impl PuzzleInput {
+    pub fn new<S: Into<String>>(content: S) -> PuzzleInput {
+        PuzzleInput {
+            raw_input: content.into(),
+        }
+    }
+
     fn get_input<T: AsRef<Path>>(day: u8, path: T) -> PuzzleInput {
         // When running in tests, the working directory is inside the package, but
         // when running the actual puzzle, it's in the workspace root.
@@ -14,10 +20,10 @@ impl PuzzleInput {
 
         if path.as_ref().exists() {
             let content = fs::read_to_string(path.as_ref()).expect("Unable to read file");
-            PuzzleInput { raw_input: content }
+            PuzzleInput::new(content)
         } else if outside_path.exists() {
             let content = fs::read_to_string(outside_path).expect("Unable to read file");
-            PuzzleInput { raw_input: content }
+            PuzzleInput::new(content)
         } else {
             let cwd = std::env::current_dir().unwrap();
             panic!(
@@ -42,6 +48,13 @@ impl PuzzleInput {
 
     pub fn lines(&self) -> Vec<String> {
         self.raw_input.lines().map(|s| s.to_string()).collect()
+    }
+
+    pub fn convert_to_ints(&self) -> Vec<i32> {
+        self.lines()
+            .iter()
+            .filter_map(|s| s.parse::<i32>().ok())
+            .collect()
     }
 }
 

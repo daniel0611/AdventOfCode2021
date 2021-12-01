@@ -8,7 +8,7 @@ fn main() {
 }
 
 fn solve_a(input: &PuzzleInput) -> usize {
-    let lines = convert_to_numbers(input);
+    let lines = input.convert_to_ints();
 
     let mut count = 0;
     for idx in 1..lines.len() {
@@ -22,7 +22,7 @@ fn solve_a(input: &PuzzleInput) -> usize {
 }
 
 fn solve_b(input: &PuzzleInput) -> usize {
-    let lines = convert_to_numbers(input);
+    let lines = input.convert_to_ints();
     let mut sliding_window_sums = vec![];
 
     for idx in 0..(lines.len() - 2) {
@@ -41,15 +41,6 @@ fn solve_b(input: &PuzzleInput) -> usize {
     increase_count
 }
 
-fn convert_to_numbers(input: &PuzzleInput) -> Vec<i32> {
-    input
-        .lines()
-        .iter()
-        .filter(|line| line.is_empty() == false)
-        .map(|line| line.parse::<i32>().unwrap())
-        .collect::<Vec<i32>>()
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -64,13 +55,13 @@ mod tests {
 
     #[test]
     fn test_solve_a() {
-        let input = PuzzleInput {raw_input: EXAMPLE_INPUT.to_string()};
+        let input = PuzzleInput::new(EXAMPLE_INPUT.to_string());
         assert_eq!(solve_a(&input), 7);
     }
 
     #[test]
     fn test_solve_b() {
-        let input = PuzzleInput {raw_input: EXAMPLE_INPUT.to_string()};
+        let input = PuzzleInput::new(EXAMPLE_INPUT.to_string());
         assert_eq!(solve_b(&input), 5);
     }
 }
