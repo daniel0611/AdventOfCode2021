@@ -1,6 +1,6 @@
-use std::path::Path;
 use std::fs;
 use std::io::{self, Write};
+use std::path::Path;
 use std::path::PathBuf;
 
 // This is a utility that asks the user for a input number

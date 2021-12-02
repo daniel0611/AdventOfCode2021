@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: joblo2213/aoc-badges-action@v3
+      - uses: J0B10/aoc-badges-action@v3
         with:
           userid: 662534
           session: ${{ secrets.AOC_SESSION }}

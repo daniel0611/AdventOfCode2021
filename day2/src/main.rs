@@ -4,22 +4,22 @@ const DAY: u8 = 2;
 enum Direction {
     Forward,
     Down,
-    Up
+    Up,
 }
 
 struct SubmarineCommand {
     direction: Direction,
-    value: i32
+    value: i32,
 }
 
 impl SubmarineCommand {
-    fn prase(line: &str) -> SubmarineCommand {
+    fn parse(line: &str) -> SubmarineCommand {
         let mut parts = line.split_whitespace();
         let direction = match parts.next().unwrap() {
             "forward" => Direction::Forward,
             "down" => Direction::Down,
             "up" => Direction::Up,
-            _ => panic!("Unknown direction: {}", parts.next().unwrap())
+            _ => panic!("Unknown direction: {}", parts.next().unwrap()),
         };
         let value = parts.next().unwrap().parse::<i32>().unwrap();
         SubmarineCommand { direction, value }
@@ -33,37 +33,38 @@ fn main() {
 }
 
 fn solve_a(input: &PuzzleInput) -> i32 {
-    let mut depth = 0;
-    let mut horizontal = 0;
-
-    let commands: Vec<SubmarineCommand> = input.lines().iter().map(|line| SubmarineCommand::prase(line)).collect();
-    for command in commands {
-        match command.direction {
-            Direction::Forward => horizontal += command.value,
-            Direction::Down => depth += command.value,
-            Direction::Up => depth -= command.value
-        }
-    }
+    let commands: Vec<SubmarineCommand> = input
+        .lines()
+        .iter()
+        .map(|line| SubmarineCommand::parse(line))
+        .collect();
+    let (horizontal, depth) = commands
+        .iter()
+        .fold((0, 0), |(horizontal, depth), command| {
+            match command.direction {
+                Direction::Forward => (horizontal + command.value, depth),
+                Direction::Down => (horizontal, depth + command.value),
+                Direction::Up => (horizontal, depth - command.value),
+            }
+        });
 
     horizontal * depth
 }
 
 fn solve_b(input: &PuzzleInput) -> i32 {
-    let mut depth = 0;
-    let mut horizontal = 0;
-    let mut aim = 0;
-
-    let commands: Vec<SubmarineCommand> = input.lines().iter().map(|line| SubmarineCommand::prase(line)).collect();
-    for command in commands {
-        match command.direction {
-            Direction::Forward => {
-                horizontal += command.value;
-                depth += command.value * aim;
-            },
-            Direction::Down => aim += command.value,
-            Direction::Up => aim -= command.value
-        }
-    }
+    let commands: Vec<SubmarineCommand> = input
+        .lines()
+        .iter()
+        .map(|line| SubmarineCommand::parse(line))
+        .collect();
+    let (depth, horizontal, _) = commands.iter().fold(
+        (0, 0, 0),
+        |(horizontal, depth, aim), command| match command.direction {
+            Direction::Forward => (horizontal + command.value, depth + command.value * aim, aim),
+            Direction::Down => (horizontal, depth, aim + command.value),
+            Direction::Up => (horizontal, depth, aim - command.value),
+        },
+    );
 
     horizontal * depth
 }
