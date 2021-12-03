@@ -11,7 +11,6 @@ fn solve_a(input: &PuzzleInput) -> u32 {
     let lines = input.lines();
     let width = lines.first().unwrap().len() as u32;
 
-    let base: u32 = 2;
     let mut gamma = 0;
     let mut epsilon = 0;
 
@@ -22,10 +21,10 @@ fn solve_a(input: &PuzzleInput) -> u32 {
 
         if one_count > zero_count {
             // 1 is the most common bit here => add to gamma
-            gamma += base.pow(width - i - 1);
+            gamma += 1 << (width - i - 1);
         } else {
             // 0 is the most common bit here => add to epsilon
-            epsilon += base.pow(width - i - 1);
+            epsilon += 1 << (width - i - 1);
         }
     }
 
