@@ -39,7 +39,7 @@ fn solve_b(input: &PuzzleInput) -> u32 {
     oxygen_generator_rating * co2_scrubber_rating
 }
 
-fn search_by_bit_criteria(lines: &Vec<String>, most_common: bool, index: usize) -> u32 {
+fn search_by_bit_criteria(lines: &[String], most_common: bool, index: usize) -> u32 {
     let mut zero_count = 0;
     let mut one_count = 0;
 
@@ -52,14 +52,10 @@ fn search_by_bit_criteria(lines: &Vec<String>, most_common: bool, index: usize) 
         }
     }
 
-    let valid_char = if most_common && one_count >= zero_count {
+    let valid_char = if most_common && one_count >= zero_count || !most_common && one_count < zero_count {
         '1'
-    } else if most_common && one_count < zero_count {
+    } else if most_common && one_count < zero_count || !most_common && one_count >= zero_count {
         '0'
-    } else if !most_common && one_count >= zero_count {
-        '0'
-    } else if !most_common && one_count < zero_count {
-        '1'
     } else {
         panic!("Invalid");
     };
