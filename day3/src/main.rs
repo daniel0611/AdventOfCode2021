@@ -15,7 +15,10 @@ fn solve_a(input: &PuzzleInput) -> u32 {
     let mut epsilon = 0;
 
     for i in 0..width {
-        let values = lines.iter().map(|line| line.chars().nth(i as usize).unwrap()).collect::<Vec<_>>();
+        let values = lines
+            .iter()
+            .map(|line| line.chars().nth(i as usize).unwrap())
+            .collect::<Vec<_>>();
         let zero_count = values.iter().filter(|&c| *c == '0').count();
         let one_count = values.iter().filter(|&c| *c == '1').count();
 
@@ -51,13 +54,14 @@ fn search_by_bit_criteria(lines: &[String], most_common: bool, index: usize) -> 
         }
     }
 
-    let valid_char = if most_common && one_count >= zero_count || !most_common && one_count < zero_count {
-        '1'
-    } else if most_common && one_count < zero_count || !most_common && one_count >= zero_count {
-        '0'
-    } else {
-        panic!("Invalid");
-    };
+    let valid_char =
+        if most_common && one_count >= zero_count || !most_common && one_count < zero_count {
+            '1'
+        } else if most_common && one_count < zero_count || !most_common && one_count >= zero_count {
+            '0'
+        } else {
+            panic!("Invalid");
+        };
 
     let mut cleaned_lines = vec![];
     for line in lines.iter() {
@@ -78,7 +82,8 @@ fn search_by_bit_criteria(lines: &[String], most_common: bool, index: usize) -> 
 mod tests {
     use super::*;
 
-    const EXAMPLE_INPUT: &str = "00100\n11110\n10110\n10111\n10101\n01111\n00111\n11100\n10000\n11001\n00010\n01010";
+    const EXAMPLE_INPUT: &str =
+        "00100\n11110\n10110\n10111\n10101\n01111\n00111\n11100\n10000\n11001\n00010\n01010";
 
     #[test]
     fn test_no_panic() {
