@@ -7,12 +7,12 @@ struct BingoBoard {
 }
 
 impl BingoBoard {
-    fn new(input: &Vec<&str>) -> Self {
+    fn new(input: &[&str]) -> Self {
         BingoBoard {
             rows: input
                 .iter()
                 .map(|row| {
-                    row.split(" ")
+                    row.split(' ')
                         .filter(|n| !n.is_empty())
                         .map(|n| n.parse().unwrap())
                         .collect()
@@ -70,20 +70,19 @@ fn parse_input(input: &PuzzleInput) -> (Vec<u32>, Vec<BingoBoard>) {
     let parts = input.raw_input.split("\n\n").collect::<Vec<_>>();
 
     let bingo_numbers: Vec<u32> = parts
-        .iter()
-        .next()
+        .get(0)
         .unwrap()
-        .split(",")
+        .split(',')
         .map(|n| n.parse().unwrap())
         .collect();
 
     let bingo_boards: Vec<BingoBoard> = parts
         .iter()
         .skip(1)
-        .map(|b| BingoBoard::new(&b.to_string().split("\n").collect::<Vec<_>>()))
+        .map(|b| BingoBoard::new(&b.to_string().split('\n').collect::<Vec<_>>()))
         .collect();
 
-        (bingo_numbers, bingo_boards)
+    (bingo_numbers, bingo_boards)
 }
 
 fn solve_a(input: &PuzzleInput) -> u32 {
@@ -110,11 +109,10 @@ fn solve_b(input: &PuzzleInput) -> u32 {
 
         for board in &bingo_boards {
             if board.check_for_win(&numbers) {
-                new_boards.retain(|b| b != board);        
+                new_boards.retain(|b| b != board);
 
                 // This was the last board to win
                 if new_boards.is_empty() {
-                    println!("{:?}", board.rows);
                     return board.calculate_score(&numbers);
                 }
             }
