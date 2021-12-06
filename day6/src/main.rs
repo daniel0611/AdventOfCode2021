@@ -7,36 +7,41 @@ fn main() {
     println!("B: {}", solve_b(&input));
 }
 
-fn simulate_fish(input: &PuzzleInput, days: u16) -> usize {
-    let mut fish_states: Vec<u8> = input.raw_input
+fn simulate_fish(input: &PuzzleInput, days: u16) -> u64 {
+    // Maps the internal state (the day) of a fish (as index) to the count of how many fish are in that state
+    let mut fish_counts = [0; 9].to_vec();
+
+    let initial_fish_states: Vec<u8> = input
+        .raw_input
         .split(',')
         .map(|s| s.parse::<u8>().unwrap())
         .collect();
 
-    for _ in 1..=days {
-        let mut new_state = fish_states.clone();
-
-        for i in 0..fish_states.len() {
-            let v = fish_states[i];
-            if v == 0 {
-                new_state[i] = 6;
-                new_state.push(8);
-            } else {
-                new_state[i] = v - 1;
-            }
-        }
-
-        fish_states = new_state;
+    for fish in initial_fish_states {
+        // E.g. this fish is in the first state (0) => increase count at index 0, etc.
+        fish_counts[fish as usize] += 1;
     }
 
-    fish_states.len()
+    for _ in 1..=days {
+        // Because we don't track every fish individually, just how many are in which state, this is now easy
+        let fish_with_state_zero = fish_counts[0];
+
+        // remove these fish from day 0 and re-add them at day 6 (7 because we will reduce it by one with the drain call)
+        fish_counts[7] += fish_with_state_zero;
+        fish_counts.drain(0..1);
+
+        // Add the newly born fish
+        fish_counts.push(fish_with_state_zero);
+    }
+
+    fish_counts.iter().sum()
 }
 
-fn solve_a(input: &PuzzleInput) -> usize {
+fn solve_a(input: &PuzzleInput) -> u64 {
     simulate_fish(input, 80)
 }
 
-fn solve_b(input: &PuzzleInput) -> usize {
+fn solve_b(input: &PuzzleInput) -> u64 {
     simulate_fish(input, 256)
 }
 
