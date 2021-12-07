@@ -42,11 +42,12 @@ impl PuzzleInput {
         self.raw_input.lines().map(|s| s.to_string()).collect()
     }
 
-    pub fn convert_to_ints(&self) -> Vec<i32> {
-        self.lines()
-            .iter()
-            .filter_map(|s| s.parse::<i32>().ok())
-            .collect()
+    pub fn convert_to_ints_by_line<S: std::str::FromStr>(&self) -> Vec<S> {
+        self.lines().iter().filter_map(|s| s.parse::<S>().ok()).collect()
+    }
+
+    pub fn convert_to_ints<S: std::str::FromStr>(&self) -> Vec<S> {
+        self.raw_input.split(',').map(|s| s.to_string()).filter_map(|s| s.parse::<S>().ok()).collect()
     }
 }
 

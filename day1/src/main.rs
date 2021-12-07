@@ -8,7 +8,7 @@ fn main() {
 }
 
 fn solve_a(input: &PuzzleInput) -> usize {
-    let lines = input.convert_to_ints();
+    let lines = input.convert_to_ints_by_line::<i32>();
 
     let mut count = 0;
     for idx in 1..lines.len() {
@@ -22,7 +22,7 @@ fn solve_a(input: &PuzzleInput) -> usize {
 }
 
 fn solve_b(input: &PuzzleInput) -> usize {
-    let lines = input.convert_to_ints();
+    let lines = input.convert_to_ints_by_line::<i32>();
     let mut sliding_window_sums = vec![];
 
     for idx in 0..(lines.len() - 2) {

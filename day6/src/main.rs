@@ -11,11 +11,7 @@ fn simulate_fish(input: &PuzzleInput, days: u16) -> u64 {
     // Maps the internal state (the day) of a fish (as index) to the count of how many fish are in that state
     let mut fish_counts = [0; 9].to_vec();
 
-    let initial_fish_states: Vec<u8> = input
-        .raw_input
-        .split(',')
-        .map(|s| s.parse::<u8>().unwrap())
-        .collect();
+    let initial_fish_states: Vec<u8> = input.convert_to_ints();
 
     for fish in initial_fish_states {
         // E.g. this fish is in the first state (0) => increase count at index 0, etc.
