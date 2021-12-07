@@ -12,19 +12,13 @@ fn solve_a(input: &PuzzleInput) -> i32 {
     let min_position = *start_positions.iter().min().unwrap();
     let max_position = *start_positions.iter().max().unwrap();
 
-    let mut costs = vec![];
-
-    for target_position in min_position..=max_position {
-        let mut required_fuel = 0;
-
-        for pos in start_positions.iter() {
-            required_fuel += (target_position - pos).abs()
-        }
-    
-        costs.push(required_fuel);
-    }
-
-    *costs.iter().min().unwrap()
+    (min_position..=max_position).map(|target_position| {
+        start_positions
+            .iter()
+            .map(|pos| target_position - pos)
+            .map(|diff| diff.abs())
+            .sum()
+    }).min().unwrap()
 }
 
 fn solve_b(input: &PuzzleInput) -> i32 {
@@ -32,22 +26,14 @@ fn solve_b(input: &PuzzleInput) -> i32 {
     let min_position = *start_positions.iter().min().unwrap();
     let max_position = *start_positions.iter().max().unwrap();
 
-    let mut costs = vec![];
-
-    for target_position in min_position..=max_position {
-        let mut required_fuel = 0;
-
-        for pos in start_positions.iter() {
-            let diff = (target_position - pos).abs();
-            for f in 1..=diff {
-                required_fuel += f;
-            }
-        }
-    
-        costs.push(required_fuel);
-    }
-
-    *costs.iter().min().unwrap()
+    (min_position..=max_position).map(|target_position| {
+        start_positions
+            .iter()
+            .map(|pos| target_position - pos)
+            .map(|diff| diff.abs())
+            .map(|diff| diff * (diff + 1) / 2) // Gaussian sum formula
+            .sum()
+    }).min().unwrap()
 }
 
 #[cfg(test)]
