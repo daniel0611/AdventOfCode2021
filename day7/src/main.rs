@@ -12,13 +12,16 @@ fn solve_a(input: &PuzzleInput) -> i32 {
     let min_position = *start_positions.iter().min().unwrap();
     let max_position = *start_positions.iter().max().unwrap();
 
-    (min_position..=max_position).map(|target_position| {
-        start_positions
-            .iter()
-            .map(|pos| target_position - pos)
-            .map(|diff| diff.abs())
-            .sum()
-    }).min().unwrap()
+    (min_position..=max_position)
+        .map(|target_position| {
+            start_positions
+                .iter()
+                .map(|pos| target_position - pos)
+                .map(|diff| diff.abs())
+                .sum()
+        })
+        .min()
+        .unwrap()
 }
 
 fn solve_b(input: &PuzzleInput) -> i32 {
@@ -26,14 +29,17 @@ fn solve_b(input: &PuzzleInput) -> i32 {
     let min_position = *start_positions.iter().min().unwrap();
     let max_position = *start_positions.iter().max().unwrap();
 
-    (min_position..=max_position).map(|target_position| {
-        start_positions
-            .iter()
-            .map(|pos| target_position - pos)
-            .map(|diff| diff.abs())
-            .map(|diff| diff * (diff + 1) / 2) // Gaussian sum formula
-            .sum()
-    }).min().unwrap()
+    (min_position..=max_position)
+        .map(|target_position| {
+            start_positions
+                .iter()
+                .map(|pos| target_position - pos)
+                .map(|diff| diff.abs())
+                .map(|diff| diff * (diff + 1) / 2) // Gaussian sum formula
+                .sum()
+        })
+        .min()
+        .unwrap()
 }
 
 #[cfg(test)]
