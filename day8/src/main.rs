@@ -92,13 +92,7 @@ impl SegmentDisplayMesurements {
     fn count_easy_digits(&self) -> usize {
         self.output
             .iter()
-            .filter(|m| match m.len() {
-                2 => true,
-                3 => true,
-                4 => true,
-                7 => true,
-                _ => false,
-            })
+            .filter(|m| matches!(m.len(), 2 | 3 | 4 | 7))
             .count()
     }
 }
