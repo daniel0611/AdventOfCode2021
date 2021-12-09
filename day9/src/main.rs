@@ -1,5 +1,5 @@
-use std::collections::HashSet;
 use aoc_utils::PuzzleInput;
+use std::collections::HashSet;
 const DAY: u8 = 9;
 
 struct Basin {
@@ -17,9 +17,15 @@ impl Basin {
         basin
     }
 
-    fn grow_new_points(&self, grid: &[Vec<usize>], search_points: Vec<&(usize, usize)>) -> HashSet<(usize, usize)> {
-        let all_neighbors = search_points.iter().flat_map(|point| get_point_neighbors(grid, **point));
-        let without_high_points = all_neighbors.filter(|(x,y)| grid[*y][*x] != 9);
+    fn grow_new_points(
+        &self,
+        grid: &[Vec<usize>],
+        search_points: Vec<&(usize, usize)>,
+    ) -> HashSet<(usize, usize)> {
+        let all_neighbors = search_points
+            .iter()
+            .flat_map(|point| get_point_neighbors(grid, **point));
+        let without_high_points = all_neighbors.filter(|(x, y)| grid[*y][*x] != 9);
         let new_points = without_high_points.filter(|point| !self.points.contains(point));
         new_points.collect()
     }
@@ -98,17 +104,17 @@ fn find_low_points(grid: &[Vec<usize>]) -> Vec<(usize, usize)> {
 fn solve_a(input: &PuzzleInput) -> usize {
     let grid = parse_grid(input);
     let low_points = find_low_points(&grid);
-    low_points
-        .iter()
-        .map(|(x, y)| 1 + grid[*y][*x])
-        .sum()
+    low_points.iter().map(|(x, y)| 1 + grid[*y][*x]).sum()
 }
 
 fn solve_b(input: &PuzzleInput) -> usize {
     let grid = parse_grid(input);
     let low_points = find_low_points(&grid);
 
-    let basins = low_points.iter().map(|point| Basin::new(*point, &grid)).collect::<Vec<_>>();
+    let basins = low_points
+        .iter()
+        .map(|point| Basin::new(*point, &grid))
+        .collect::<Vec<_>>();
     let mut basin_sizes = basins.iter().map(|b| b.size()).collect::<Vec<_>>();
     basin_sizes.sort_unstable(); // ascending
     basin_sizes.reverse(); // descending
