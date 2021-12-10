@@ -37,14 +37,14 @@ fn create_cargo_toml(day: u8, day_dir: &Path) {
     let cargo_toml_path = day_dir.join("Cargo.toml");
     let cargo_toml_str = format!(
         r#"[package]
-name = "day{day}"
+name = "day{:02}"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 aoc-utils = {{ path = "../aoc-utils" }}
 "#,
-        day = day
+        day
     );
     fs::write(&cargo_toml_path, cargo_toml_str).expect("Could not write Cargo.toml");
 }
@@ -102,7 +102,7 @@ mod tests {{
 }
 
 fn create_input_file(day: u8, day_dir: &Path) {
-    let name = format!("input_day{}.txt", day);
+    let name = format!("input_day{:02}.txt", day);
     let input_file_path = day_dir.join(name);
     fs::File::create(input_file_path).expect("Could not create input file");
 }

@@ -14,12 +14,12 @@ impl PuzzleInput {
 
     /// Reads the puzzle input for the puzzle with the given day from input_day<day_number>.txt
     pub fn get_input(day: u8) -> PuzzleInput {
-        let path_string = format!("input_day{}.txt", day);
+        let path_string = format!("input_day{:02}.txt", day);
         let path = Path::new(&path_string);
 
         // When running in tests, the working directory is inside the package, but
         // when running the actual puzzle, it's in the workspace root.
-        let outside_path_str = format!("day{}/{}", day, path.display());
+        let outside_path_str = format!("day{:02}/{}", day, path.display());
         let outside_path = Path::new(&outside_path_str);
 
         if path.exists() {

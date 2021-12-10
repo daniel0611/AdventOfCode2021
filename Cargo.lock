@@ -29,42 +29,35 @@ dependencies = [
 ]
 
 [[package]]
-name = "day0"
+name = "day00"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
 ]
 
 [[package]]
-name = "day1"
+name = "day01"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
 ]
 
 [[package]]
-name = "day10"
+name = "day02"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
 ]
 
 [[package]]
-name = "day2"
+name = "day03"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
 ]
 
 [[package]]
-name = "day3"
-version = "0.1.0"
-dependencies = [
- "aoc-utils",
-]
-
-[[package]]
-name = "day4"
+name = "day04"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
@@ -72,35 +65,42 @@ dependencies = [
 ]
 
 [[package]]
-name = "day5"
+name = "day05"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
 ]
 
 [[package]]
-name = "day6"
+name = "day06"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
 ]
 
 [[package]]
-name = "day7"
+name = "day07"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
 ]
 
 [[package]]
-name = "day8"
+name = "day08"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
 ]
 
 [[package]]
-name = "day9"
+name = "day09"
+version = "0.1.0"
+dependencies = [
+ "aoc-utils",
+]
+
+[[package]]
+name = "day10"
 version = "0.1.0"
 dependencies = [
  "aoc-utils",
