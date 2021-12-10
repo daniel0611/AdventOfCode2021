@@ -25,6 +25,12 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Cache Cargo crates.io index
+        uses: actions/cache@v2
+        with:
+          path: ~/.cargo/registry/index
+          key: cargo-crates.io-index
+
       - uses: actions-rs/cargo@v1
         name: Check
         with:
