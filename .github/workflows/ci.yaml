@@ -55,6 +55,6 @@ jobs:
         if: startsWith(matrix.dir, 'day')
         with:
           command: run
-          args: -p ${{ matrix.dir }}
+          args: -p ${{ matrix.dir }} --release
 
       
