@@ -30,7 +30,7 @@ impl TransparentPaper {
         }
 
         let instructions = instruction_lines
-            .map(|l| FoldInstruction::parse(l))
+            .map(FoldInstruction::parse)
             .collect::<Vec<_>>();
 
         TransparentPaper {
