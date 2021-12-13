@@ -119,21 +119,22 @@ fn solve_a(input: &PuzzleInput) -> usize {
     paper.count_dots()
 }
 
-fn solve_b(input: &PuzzleInput) -> usize {
+fn solve_b(input: &PuzzleInput) -> String {
     let mut paper = TransparentPaper::parse(input);
 
     for instruction in paper.fold_instructions.clone().iter() {
         paper.execute_fold(instruction);
     }
 
+    let mut output = String::from("\n");
     for y in 0..paper.map.len() {
         for x in 0..paper.map[0].len() {
-            print!("{}", if paper.map[y][x] { '#' } else { '.' });
+            output.push(if paper.map[y][x] { '#' } else { '.' });
         }
-        println!();
+        output.push('\n');
     }
 
-    1
+    output
 }
 
 #[cfg(test)]
@@ -172,5 +173,17 @@ mod tests {
     #[test]
     fn test_solve_a() {
         assert_eq!(solve_a(&PuzzleInput::new(TEST_INPUT)), 17);
+    }
+
+    #[test]
+    fn test_solve_b() {
+        let expected = "\n#####\n\
+                          #...#\n\
+                          #...#\n\
+                          #...#\n\
+                          #####\n\
+                          .....\n\
+                          .....\n";
+        assert_eq!(solve_b(&PuzzleInput::new(TEST_INPUT)), expected);
     }
 }
