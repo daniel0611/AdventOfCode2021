@@ -1,5 +1,4 @@
 use aoc_utils::PuzzleInput;
-use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 const DAY: u8 = 14;
 
@@ -17,21 +16,16 @@ impl Polymer {
             .split('\n')
             .map(|line| {
                 let mut parts = line.split(" -> ");
-                let left = parts.next().unwrap();
-                let right = parts.next().unwrap();
-                (left.to_string(), right.chars().next().unwrap())
+                let src = parts.next().unwrap().to_string();
+                let replacement_char = parts.next().unwrap().chars().next().unwrap();
+                (src, replacement_char)
             })
             .collect::<HashMap<_, _>>();
 
-        let mut current = HashMap::new();
+        let mut current: HashMap<String, usize> = HashMap::new();
         for i in 0..template.len() - 1 {
             let s = &template[i..=i + 1];
-            assert_eq!(s.len(), 2);
-            if current.contains_key(s) {
-                current.insert(s.to_string(), current[s] + 1);
-            } else {
-                current.insert(s.to_string(), 1);
-            }
+            *current.entry(s.to_string()).or_insert(0) += 1;
         }
 
         Polymer { current, rules }
@@ -47,30 +41,13 @@ impl Polymer {
         let mut output = HashMap::new();
 
         for (key, count) in self.current.iter() {
-            if !self.rules.contains_key(key) {
-                continue;
-            }
             let middle_char = self.rules[key];
 
-            let mut first_key = String::default();
-            first_key.push(key.chars().next().unwrap());
-            first_key.push(middle_char);
-            if output.contains_key(&first_key) {
-                let new_value = output[&first_key] + count;
-                output.insert(first_key, new_value);
-            } else {
-                output.insert(first_key, *count);
-            }
+            let first_key = format!("{}{}", key.chars().next().unwrap(), middle_char);
+            *output.entry(first_key.clone()).or_default() += count;
 
-            let mut second_key = String::default();
-            second_key.push(middle_char);
-            second_key.push(key.chars().last().unwrap());
-            if output.contains_key(&second_key) {
-                let new_value = output[&second_key] + count;
-                output.insert(second_key, new_value);
-            } else {
-                output.insert(second_key, *count);
-            }
+            let second_key = format!("{}{}", middle_char, key.chars().last().unwrap());
+            *output.entry(second_key.clone()).or_default() += count;
         }
 
         self.current = output;
@@ -81,19 +58,11 @@ impl Polymer {
 
         for (chars, value) in self.current.iter() {
             let c = chars.chars().nth(1).unwrap();
-            match char_map.entry(c) {
-                Entry::Occupied(mut e) => {
-                    e.insert(e.get() + value);
-                }
-                Entry::Vacant(e) => {
-                    e.insert(*value);
-                }
-            };
+            *char_map.entry(c).or_default() += value;
         }
 
-        let mut char_counts = char_map.iter().collect::<Vec<_>>();
-        char_counts.sort_by(|a, b| a.1.cmp(b.1));
-        char_counts.last().unwrap().1 - char_counts.first().unwrap().1
+        let char_counts = char_map.iter().map(|(_, count)| *count).collect::<Vec<_>>();
+        char_counts.iter().max().unwrap() - char_counts.iter().min().unwrap()
     }
 }
 
