@@ -118,6 +118,27 @@ impl CaveMap {
             .map(|p| self.map[p.1][p.0] as usize)
             .sum()
     }
+
+    fn expand_part_b(&mut self) {
+        let mut extended_map = vec![];
+
+        for y in 0..self.map.len() * 5 {
+            let mut row = vec![];
+
+            for x in 0..self.map[y % self.map.len()].len() * 5 {
+                let v = self.map[y % self.map.len()][x % self.map[0].len()];
+                let mut v = v + (x / self.map[0].len()) as u32 + (y / self.map.len()) as u32;
+                if v > 9 {
+                    v -= 9
+                }
+                row.push(v);
+            }
+
+            extended_map.push(row);
+        }
+
+        self.map = extended_map;
+    }
 }
 
 fn solve_a(input: &PuzzleInput) -> usize {
@@ -140,7 +161,10 @@ fn solve_a(input: &PuzzleInput) -> usize {
 }
 
 fn solve_b(input: &PuzzleInput) -> usize {
-    input.lines().len()
+    let mut map = CaveMap::parse(input);
+    map.expand_part_b();
+    let path = map.get_safest_path();
+    map.get_path_risk(&path)
 }
 
 #[cfg(test)]
@@ -162,6 +186,7 @@ mod tests {
     fn test_no_panic() {
         let input = PuzzleInput::get_input(DAY);
         solve_a(&input);
+        // Too slow, but still gets run in CI in release mode
         // solve_b(&input);
     }
 
@@ -170,8 +195,8 @@ mod tests {
         assert_eq!(solve_a(&PuzzleInput::new(TEST_INPUT)), 40);
     }
 
-    // #[test]
-    // fn test_solve_b() {
-    //     assert_eq!(solve_b(&PuzzleInput::new(TEST_INPUT)), 0);
-    // }
+    #[test]
+    fn test_solve_b() {
+        assert_eq!(solve_b(&PuzzleInput::new(TEST_INPUT)), 315);
+    }
 }
