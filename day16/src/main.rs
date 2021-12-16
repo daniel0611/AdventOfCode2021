@@ -13,28 +13,9 @@ impl Packet {
         let mut bit_string = String::default();
 
         for c in input.raw_input.chars() {
-            // TODO: could be made cleaner by using a function to parse the hex number and convert it to binary
-            let binary = match c {
-                '0' => "0000",
-                '1' => "0001",
-                '2' => "0010",
-                '3' => "0011",
-                '4' => "0100",
-                '5' => "0101",
-                '6' => "0110",
-                '7' => "0111",
-                '8' => "1000",
-                '9' => "1001",
-                'A' => "1010",
-                'B' => "1011",
-                'C' => "1100",
-                'D' => "1101",
-                'E' => "1110",
-                'F' => "1111",
-                _ => panic!("Invalid character: {}", c),
-            };
-
-            bit_string.push_str(binary);
+            let value = c.to_digit(16).unwrap();
+            let binary = format!("{:04b}", value);
+            bit_string.push_str(&binary);
         }
 
         Self::parse_bit_string(bit_string).0
