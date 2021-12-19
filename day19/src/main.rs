@@ -104,11 +104,7 @@ struct Scanner {
 
 impl Scanner {
     fn parse_all(input: &PuzzleInput) -> Vec<Scanner> {
-        input
-            .raw_input
-            .split("\n\n")
-            .map(|line| Scanner::parse(line))
-            .collect()
+        input.raw_input.split("\n\n").map(Scanner::parse).collect()
     }
 
     fn parse(s: &str) -> Scanner {
@@ -127,13 +123,15 @@ impl Scanner {
             .map(|line| (*line).into())
             .collect::<Vec<_>>();
 
-        Scanner { id, beacons, position: None }
+        Scanner {
+            id,
+            beacons,
+            position: None,
+        }
     }
 }
 
-fn compute_absolute_beacon_positions(
-    input: &PuzzleInput,
-) -> HashMap<Scanner, Vec<Position>> {
+fn compute_absolute_beacon_positions(input: &PuzzleInput) -> HashMap<Scanner, Vec<Position>> {
     let possible_orientations = get_all_orientations();
     let all_scanners = Scanner::parse_all(input);
     let mut known_scanners = HashMap::new();
