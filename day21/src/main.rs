@@ -37,54 +37,39 @@ fn simulate_dice_game_a<F>(
     dice: Rc<RefCell<F>>,
     players: (Player, Player),
     current_player: usize,
-) -> Vec<(Player, Player)>
+) -> (Player, Player)
 where
-    F: FnMut() -> Vec<u16>,
+    F: FnMut() -> u16,
 {
     if players.0.score >= win_score || players.1.score >= win_score {
-        return vec![players];
+        return players;
     }
 
-    let mut players = players;
-    let p = if current_player == 0 {
-        &mut players.0
+    let mut p = if current_player == 0 {
+        players.0
     } else {
-        &mut players.1
+        players.1
     };
 
-    let mut player_posibilities = vec![];
-    let throw_1_posibilities = dice.borrow_mut()();
-    let throw_2_posibilities = dice.borrow_mut()();
-    let throw_3_posibilities = dice.borrow_mut()();
-
-    for t1 in throw_1_posibilities.iter() {
-        for t2 in throw_2_posibilities.iter() {
-            for t3 in throw_3_posibilities.iter() {
-                let mut pos = p.current_position + (t1 + t2 + t3);
-                while pos > 10 {
-                    pos -= 10;
-                }
-
-                player_posibilities.push(Player {
-                    current_position: pos,
-                    score: p.score + pos as usize,
-                });
-            }
-        }
+    let mut pos = p.current_position;
+    for _ in 0..3 {
+        pos += dice.borrow_mut()();
     }
 
+    while pos > 10 {
+        pos -= 10;
+    }
+
+    p.current_position = pos;
+    p.score += pos as usize;
+
     let new_player = (current_player + 1) % 2;
-    player_posibilities
-        .iter()
-        .flat_map(|p| {
-            let players = if current_player == 0 {
-                (*p, players.1)
-            } else {
-                (players.0, *p)
-            };
-            simulate_dice_game_a(input, win_score, dice.clone(), players, new_player)
-        })
-        .collect()
+    let players = if current_player == 0 {
+        (p, players.1)
+    } else {
+        (players.0, p)
+    };
+    simulate_dice_game_a(input, win_score, dice, players, new_player)
 }
 
 type SimluationCache = Rc<RefCell<HashMap<(usize, (Player, Player)), (usize, usize)>>>;
@@ -128,6 +113,7 @@ fn simulate_dice_game_b(
         }
     }
 
+    let new_player = (current_player + 1) % 2;
     player_posibilities
         .iter()
         .map(|p| {
@@ -141,7 +127,6 @@ fn simulate_dice_game_b(
             if cache.borrow().contains_key(&cache_key) {
                 *cache.borrow().get(&cache_key).unwrap()
             } else {
-                let new_player = (current_player + 1) % 2;
                 let v = simulate_dice_game_b(input, win_score, players, new_player, cache.clone());
                 cache.borrow_mut().insert(cache_key, v);
                 v
@@ -161,12 +146,10 @@ fn solve_a(input: &PuzzleInput) -> usize {
             dice = 1;
         }
         dice_rolls += 1;
-        vec![v]
+        v
     };
     let players = parse_players(input);
-    let possibilities = simulate_dice_game_a(input, 1000, Rc::new(RefCell::new(dice)), players, 0);
-
-    let result = &possibilities[0];
+    let result = simulate_dice_game_a(input, 1000, Rc::new(RefCell::new(dice)), players, 0);
 
     let looser = if result.0.score < result.1.score {
         &result.0
