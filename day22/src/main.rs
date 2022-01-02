@@ -9,10 +9,18 @@ fn main() {
     println!("B: {}", solve_b(&input));
 }
 
+#[derive(Clone)]
+struct Point {
+    x: isize,
+    y: isize,
+    z: isize,
+}
+
+#[derive(Clone)]
 struct Cube {
     on: bool,
-    start: (isize, isize, isize),
-    end: (isize, isize, isize),
+    start: Point,
+    end: Point,
 }
 
 impl Cube {
@@ -33,10 +41,74 @@ impl Cube {
 
         Cube {
             on,
-            start: (coo[0].0, coo[1].0, coo[2].0),
-            end: (coo[0].1, coo[1].1, coo[2].1),
+            start: Point {
+                x: coo[0].0,
+                y: coo[1].0,
+                z: coo[2].0,
+            },
+            end: Point {
+                x: coo[0].1,
+                y: coo[1].1,
+                z: coo[2].1,
+            },
         }
     }
+
+    fn volume(&self) -> isize {
+        let x = self.end.x - self.start.x + 1;
+        let y = self.end.y - self.start.y + 1;
+        let z = self.end.z - self.start.z + 1;
+        x * y * z
+    }
+
+    fn intersection(&self, other: &Cube) -> Option<Cube> {
+        let min = Point {
+            x: self.start.x.max(other.start.x),
+            y: self.start.y.max(other.start.y),
+            z: self.start.z.max(other.start.z),
+        };
+        let max = Point {
+            x: self.end.x.min(other.end.x),
+            y: self.end.y.min(other.end.y),
+            z: self.end.z.min(other.end.z),
+        };
+
+        if min.x <= max.x && min.y <= max.y && min.z <= max.z {
+            Some(Cube {
+                on: true,
+                start: min,
+                end: max,
+            })
+        } else {
+            None
+        }
+    }
+}
+
+fn count_cubes(input_cubes: &[Cube]) -> usize {
+    let mut pos_cubes = vec![];
+    let mut neg_cubes = vec![];
+
+    for cube in input_cubes {
+        let new_neg = pos_cubes
+            .iter()
+            .filter_map(|pos_cube| cube.intersection(pos_cube))
+            .collect::<Vec<_>>();
+        let new_pos = neg_cubes
+            .iter()
+            .filter_map(|neg_cube| cube.intersection(neg_cube))
+            .collect::<Vec<_>>();
+
+        if cube.on {
+            pos_cubes.push(cube.clone());
+        }
+        pos_cubes.extend(new_pos);
+        neg_cubes.extend(new_neg);
+    }
+
+    let pos_volume = pos_cubes.iter().map(|cube| cube.volume()).sum::<isize>();
+    let neg_volume = neg_cubes.iter().map(|cube| cube.volume()).sum::<isize>();
+    (pos_volume - neg_volume) as usize
 }
 
 fn solve_a(input: &PuzzleInput) -> usize {
@@ -48,9 +120,9 @@ fn solve_a(input: &PuzzleInput) -> usize {
     let mut grid = HashSet::new();
 
     for cube in cubes.iter() {
-        for x in max(cube.start.0, -50)..=min(cube.end.0, 50) {
-            for y in max(cube.start.1, -50)..=min(cube.end.1, 50) {
-                for z in max(cube.start.2, -50)..=min(cube.end.2, 50) {
+        for x in max(cube.start.x, -50)..=min(cube.end.x, 50) {
+            for y in max(cube.start.y, -50)..=min(cube.end.y, 50) {
+                for z in max(cube.start.z, -50)..=min(cube.end.z, 50) {
                     if cube.on {
                         grid.insert((x, y, z));
                     } else {
@@ -64,32 +136,13 @@ fn solve_a(input: &PuzzleInput) -> usize {
     grid.len()
 }
 
-fn solve_b(_input: &PuzzleInput) -> usize {
-    0
-    // let cubes = input
-    //     .lines()
-    //     .iter()
-    //     .map(|s| Cube::parse(&s))
-    //     .collect::<Vec<_>>();
-
-    // let mut grid = HashSet::new();
-
-    // for cube in cubes.iter() {
-    //     for x in cube.start.0..=cube.end.0 {
-    //         for y in cube.start.1..=cube.end.1 {
-    //             for z in cube.start.2..=cube.end.2 {
-    //                 if cube.on {
-    //                     grid.insert((x, y, z));
-    //                 } else {
-    //                     grid.remove(&(x, y, z));
-    //                 }
-    //             }
-    //         }
-    //         println!("{}", grid.len());
-    //     }
-    // }
-
-    // grid.len()
+fn solve_b(input: &PuzzleInput) -> usize {
+    let cubes = input
+        .lines()
+        .iter()
+        .map(|s| Cube::parse(s))
+        .collect::<Vec<_>>();
+    count_cubes(&cubes)
 }
 
 #[cfg(test)]
@@ -157,20 +210,20 @@ mod tests {
                               on x=-53470..21291,y=-120233..-33476,z=-44150..38147\n\
                               off x=-93533..-4276,y=-16170..68771,z=-104985..-24507";
 
-    // #[test]
-    // fn test_no_panic() {
-    //     let input = PuzzleInput::get_input(DAY);
-    //     solve_a(&input);
-    //     solve_b(&input);
-    // }
+    #[test]
+    fn test_no_panic() {
+        let input = PuzzleInput::get_input(DAY);
+        solve_a(&input);
+        solve_b(&input);
+    }
 
     #[test]
     fn test_solve_a() {
         assert_eq!(solve_a(&PuzzleInput::new(TEST_INPUT)), 474140);
     }
 
-    // #[test]
-    // fn test_solve_b() {
-    //     assert_eq!(solve_b(&PuzzleInput::new(TEST_INPUT)), 0);
-    // }
+    #[test]
+    fn test_solve_b() {
+        assert_eq!(solve_b(&PuzzleInput::new(TEST_INPUT)), 2758514936282235);
+    }
 }
